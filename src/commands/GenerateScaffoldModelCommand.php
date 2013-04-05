@@ -40,13 +40,15 @@ class GenerateScaffoldModelCommand extends Generate
 	 */
 	public function applyDataToStub()
 	{
-		$stub = $this->getStub();
-
 		$name = ucwords(strtolower($this->argument('fileName')));
 
+		$stub = $this->getStub();
 		$stub = str_replace('{{name}}', $name, $stub);
-		$fields = $this->getFields();
+		
+		$fields = $this->setFields();
 		$stub = str_replace('{{fields}}', $fields, $stub);
+
+		return $stub;
 	}
 
 	/**
@@ -68,8 +70,16 @@ class GenerateScaffoldModelCommand extends Generate
 	 */
 	protected function getOptions()
 	{
-	  return array(
-	    array('path', null, InputOption::VALUE_OPTIONAL, 'Path to save new model.', 'models'),
-	  );
+		return array(
+			array('path', null, InputOption::VALUE_OPTIONAL, 'The path to the migrations folder', 'database/migrations'),
+			array('fields', null, InputOption::VALUE_OPTIONAL, 'Table fields', null)
+		);
+  	}
+
+	protected function setFields()
+	{
+		if ($fields = $this->option('fields')) {
+			return $fieldsString;
+		} else return '';
 	}
 }
