@@ -52,6 +52,61 @@ class GenerateScaffoldModelCommand extends Generate
 	}
 
 	/**
+	 * Create a string representing an array of terms.
+	 */
+	protected function setFields()
+	{
+		if ($this->option('fields')) {
+			$seperator = ",\n\t\t";
+			$fieldsString = '';
+			$fields = $this->convertFieldsToArray();
+			foreach ($fields as $count => $field) {
+				if ($count >= 1) {
+					$fieldsString .= $seperator . "'$field->name'";
+				} else {
+					$fieldsString .= "'$field->name'";
+				}
+			}
+			
+			return $fieldsString;
+		} else return '';
+	}
+
+	/**
+	 * If Schema fields are specified, parse
+	 * them into an array of objects.
+	 *
+	 * So: name:string, age:integer
+	 * Becomes: [ ((object)['name' => 'string'], (object)['age' => 'integer'] ]
+	 *
+	 * @returns mixed
+	 */
+	protected function convertFieldsToArray()
+	{
+		$fields = $this->option('fields');
+
+		if ( !$fields ) return;
+
+		$fields = preg_split('/, ?/', $fields);
+
+		foreach($fields as &$bit) {
+		  $columnInfo = preg_split('/ ?: ?/', $bit);
+
+		  $bit = new \StdClass;
+		  $bit->name = $columnInfo[0];
+		  $bit->type = $columnInfo[1];
+
+		  // If there is a third key, then
+		  // the user is setting an index/option.
+		  if ( isset($columnInfo[2]) ) {
+		    $bit->index = $columnInfo[2];
+		  }
+		}
+
+		return $fields;
+	}
+
+	/**
 	 * Get the console command arguments.
 	 *
 	 * @return array
@@ -71,15 +126,8 @@ class GenerateScaffoldModelCommand extends Generate
 	protected function getOptions()
 	{
 		return array(
-			array('path', null, InputOption::VALUE_OPTIONAL, 'The path to the migrations folder', 'database/migrations'),
+			array('path', null, InputOption::VALUE_OPTIONAL, 'The path to the models folder', 'models'),
 			array('fields', null, InputOption::VALUE_OPTIONAL, 'Table fields', null)
 		);
   	}
-
-	protected function setFields()
-	{
-		if ($fields = $this->option('fields')) {
-			return $fieldsString;
-		} else return '';
-	}
 }
