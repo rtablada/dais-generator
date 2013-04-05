@@ -28,7 +28,38 @@ class DaisGeneratorServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app['generate.scaffoldController'] = $this->app->share(function($app)
+		{
+			return new Commands\GenerateScaffoldControllerCommand($app);
+		});
+
+		$this->app['generate.scaffoldModel'] = $this->app->share(function($app)
+		{
+			return new Commands\GenerateScaffoldModelCommand($app);
+		});
+
+		$this->app['generate.scaffoldView'] = $this->app->share(function($app)
+		{
+			return new Commands\GenerateScaffoldViewCommand($app);
+		});
+
+		$this->app['generate.scaffoldViews'] = $this->app->share(function($app)
+		{
+			return new Commands\GenerateScaffoldViewsCommand($app);
+		});
+
+		$this->app['generate.scaffold'] = $this->app->share(function($app)
+		{
+			return new Commands\GenerateScaffoldCommand($app);
+		});
+
+		$this->commands(
+			'generate.scaffoldController',
+			'generate.scaffoldModel',
+			'generate.scaffoldView',
+			'generate.scaffoldViews',
+			'generate.scaffold'
+		);
 	}
 
 	/**
