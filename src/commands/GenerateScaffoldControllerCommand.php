@@ -55,9 +55,9 @@ class GenerateScaffoldControllerCommand extends Generate
 		$stub = str_replace('{{pluralName}}', $pluralName, $stub);
 		$stub = str_replace('{{PluralName}}', ucwords($pluralName), $stub);
 		$stub = str_replace('{{singleName}}', $name, $stub);
-		$stub = str_replace('{{singleName}}', ucwords($name), $stub);
+		$stub = str_replace('{{SingleName}}', ucwords($name), $stub);
 
-		return str_replace('{{name}}', ucwords($this->argument('fileName')), $this->getStub());
+		return $stub;
 	}
 
 	/**
@@ -68,7 +68,7 @@ class GenerateScaffoldControllerCommand extends Generate
 	protected function getArguments()
 	{
 	  return array(
-	    array('fileName', InputArgument::REQUIRED, 'Name of the model.'),
+	    array('fileName', InputArgument::REQUIRED, 'Name of the controller.'),
 	  );
 	}
 
@@ -80,7 +80,21 @@ class GenerateScaffoldControllerCommand extends Generate
 	protected function getOptions()
 	{
 	  return array(
-	    array('path', null, InputOption::VALUE_OPTIONAL, 'Path to save new model.', 'models'),
+	    array('path', null, InputOption::VALUE_OPTIONAL, 'Path to save new controller.', 'controllers'),
 	  );
+	}
+
+	/**
+	 * Get the path to the file that should be generated.
+	 * 
+	 * @return string
+	 */
+	protected function getNewFilePath()
+	{
+		$name = strtolower($this->argument('fileName'));
+		$pluralName = Pluralizer::plural($name);
+		$controllerName = ucwords($pluralName) . 'Controller';
+		
+		return app_path() . '/' . $this->option('path') . '/' . $controllerName . '.php';
 	}
 }
