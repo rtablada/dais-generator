@@ -16,10 +16,16 @@
 	@if (count(${{pluralName}}))
 		<table class="table table-striped">
 			<thead>
-				{{thead}}
+				<tr>
+					{{thead}}
+				</tr>
 			</thead>
 			<tbody>
-				{{tbody}}
+				@foreach (${{pluralName}} as ${{singleName}})
+				<tr>
+					{{tbody}}
+				</tr>
+				@endforeach
 			</tbody>
 		</table>
 	@else

@@ -66,7 +66,7 @@ class GenerateScaffoldViewsCommand extends Generate
 			$this->call(
 				'generate:scaffoldView',
 				array(
-					'fileName'  => "{$method}",
+					'fileName'  => $name,
 					'--method'  => $method,
 					'--path'    => 'views/' . strtolower($name),
 					'--fields' => $this->option('fields')

@@ -35,35 +35,51 @@ class GenerateScaffoldViewCommand extends Generate
 
 	public function fire()
 	{
-		switch ($this->option('method')) {
-			case 'index':
-				$this->buildIndex();
-				break;
-			
-			default:
-				echo 'null';
-				break;
+		if ( ! \File::exists($this->getNewFilePath()) ) {
+			switch ($this->option('method')) {
+				case 'index':
+					$this->buildIndex();
+					break;
+				case 'show':
+					$this->buildShow();
+					break;
+				
+				default:
+					echo 'null';
+					die();
+					break;
+			}
+		} else {
+			return $this->error('The ' . $this->option('method') . ' view already exists!');
 		}
-		die();
 	}
 
 	/**
 	 * Generates Index View for scaffold
+	 * 
 	 * @return void
 	 */
 	public function buildIndex()
 	{
-		$thead = $this->buildTableHead();
-		// $tbody = $this->buildTableBody();
+
+		$thead = $this->buildIndexTableHead();
+		$tbody = $this->buildIndexTableBody();
 		
 		$stub = $this->getStub('views/index');
 		$stub = str_replace('{{thead}}', $thead, $stub);
-		// $stub = str_replace('{{tbody}}', $tbody, $stub);
+		$stub = str_replace('{{tbody}}', $tbody, $stub);
+		$this->replaceNames($stub);
 
 		\File::put($this->getNewFilePath(), $stub);
+		$this->info('File created at: ' . $this->getNewFilePath());
 	}
 
-	public function buildTableHead()
+	/**
+	 * Creates stub for table head of index view
+	 * 
+	 * @return string
+	 */
+	public function buildIndexTableHead()
 	{
 		$fields = $this->getFields();
 		$thead = '';
@@ -72,10 +88,56 @@ class GenerateScaffoldViewCommand extends Generate
 			if ($key == 0) {
 				$thead .= $th;
 			} else {
-				$thead .= "\n\t\t\t\t" . $th;
+				$thead .= "\n\t\t\t\t\t" . $th;
 			}
 		}
 		return $thead;
+	}
+
+	public function buildIndexTableBody()
+	{
+		$name = strtolower($this->argument('fileName'));
+		$fields = $this->getFields();
+		$tbody = '';
+
+		foreach ($fields as $key => $field) {
+			$td = 
+				'<td>{{ substr(0, 100, ' .
+				$name . '->' .
+				$field->name .
+				') }}</td>';
+
+			if ($key == 0) {
+				$tbody .= $td;
+			} else {
+				$tbody .= "\n\t\t\t\t\t" . $td;
+			}
+		}
+		return $tbody;
+	}
+
+	public function buildShow()
+	{
+		$arguments = $this->getArguments();
+		$stub = $this->getStub('views/show');
+		$stub = str_replace('{{arguments}}', $arguments, $stub);
+		$this->replaceNames($stub);
+
+		\File::put($this->getNewFilePath(), $stub);
+		$this->info('File created at: ' . $this->getNewFilePath());
+	}
+
+	public function replaceNames(&$stub)
+	{
+		$name = strtolower($this->argument('fileName'));
+		$pluralName = Pluralizer::plural($name);
+		$controllerName = ucwords($pluralName) . 'Controller';
+
+		$stub = str_replace('{{ControllerName}}', $controllerName, $stub);
+		$stub = str_replace('{{pluralName}}', $pluralName, $stub);
+		$stub = str_replace('{{PluralName}}', ucwords($pluralName), $stub);
+		$stub = str_replace('{{singleName}}', $name, $stub);
+		$stub = str_replace('{{SingleName}}', ucwords($name), $stub);
 	}
 
 	/**
@@ -85,7 +147,7 @@ class GenerateScaffoldViewCommand extends Generate
 	 */
 	protected function getNewFilePath()
 	{
-		return app_path() . '/' . $this->option('path') . '/' . strtolower($this->argument('fileName')) . '.php';
+		return app_path() . '/' . $this->option('path') . '/' . strtolower($this->option('method')) . '.php';
 	}
 
 	public function applyDataToStub()
@@ -93,7 +155,7 @@ class GenerateScaffoldViewCommand extends Generate
 		return null;
 	}
 
-		/**
+	/**
 	 * If Schema fields are specified, parse
 	 * them into an array of objects.
 	 *
