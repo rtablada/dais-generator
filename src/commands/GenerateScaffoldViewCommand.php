@@ -118,13 +118,18 @@ class GenerateScaffoldViewCommand extends Generate
 
 	public function buildShow()
 	{
-		$arguments = $this->getArguments();
+		$properties = $this->getProperties();
 		$stub = $this->getStub('views/show');
-		$stub = str_replace('{{arguments}}', $arguments, $stub);
+		$stub = str_replace('{{properties}}', $properties, $stub);
 		$this->replaceNames($stub);
 
 		\File::put($this->getNewFilePath(), $stub);
 		$this->info('File created at: ' . $this->getNewFilePath());
+	}
+
+	public function getShowProperties()
+	{
+		
 	}
 
 	public function replaceNames(&$stub)
