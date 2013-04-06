@@ -16,10 +16,10 @@
 	@if (count(${{pluralName}}))
 		<table class="table table-striped">
 			<thead>
-				{{headers}}
+				{{thead}}
 			</thead>
 			<tbody>
-				{{rows}}
+				{{tbody}}
 			</tbody>
 		</table>
 	@else

@@ -51,12 +51,12 @@ class GenerateScaffoldViewsCommand extends Generate
 			\File::makeDirectory(app_path() . '/views/layouts');
 		}
 
+		//Create scaffold layout
 		if ( ! \File::exists(app_path() . '/views/layouts/scaffold.blade.php') )
 		{
 			$this->generateLayout();
 		}
-
-		//Create scaffold layout
+		
 
 		$name = ucwords(strtolower($this->argument('fileName')));
 
@@ -68,7 +68,8 @@ class GenerateScaffoldViewsCommand extends Generate
 				array(
 					'fileName'  => "{$method}",
 					'--method'  => $method,
-					'--path'    => 'views/' . strtolower($name)
+					'--path'    => 'views/' . strtolower($name),
+					'--fields' => $this->option('fields')
 				)
 			);
 		}
@@ -77,6 +78,16 @@ class GenerateScaffoldViewsCommand extends Generate
 	public function applyDataToStub()
 	{
 		return null;
+	}
+
+	public function generateLayout()
+	{
+		// Get stub for layout
+		$layoutFile = $this->getStub('views/layout');
+		// Save layout file
+		$layoutPath = app_path() . '/views/layouts/scaffold.blade.php';
+		\File::put($layoutPath, $layoutFile);
+		$this->info('File created at: ' . $layoutPath);
 	}
 
 	/**
@@ -99,7 +110,8 @@ class GenerateScaffoldViewsCommand extends Generate
 	protected function getOptions()
 	{
 	  return array(
-	    array('path', null, InputOption::VALUE_OPTIONAL, 'Path to save new model.', 'models'),
+	    array('path', null, InputOption::VALUE_OPTIONAL, 'Path to save new views.', 'views'),
+	    array('fields', null, InputOption::VALUE_OPTIONAL, 'Table fields', null)
 	  );
 	}
 }
