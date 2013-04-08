@@ -3,11 +3,20 @@ This Laravel 4 package provides a generator for creating scaffolding styled with
 
 ## Installation
 
-This package will be available on Composer soon!
+Begin by installing this package through Composer. Edit your project's `composer.json` file to require `way/generators`.
+
+    "require": {
+		"laravel/framework": "4.0.*",
+		"rtablada/dais-generator": "dev-master"
+	}
+
+Next, update Composer from the Terminal:
+
+    composer update
 
 Once this operation completes, the final step is to add the service provider. Open `app/config/app.php`, and add these new items to the providers array.
 
-	'Rtablada\DaisGenerator\DaisGeneratorServiceProvider'
+	'Rtablada\DaisGenerator\DaisGeneratorServiceProvider',
 	'Way\Generators\GeneratorsServiceProvider'
 
 That's all folks! We also installed Jeffrey Way's awesome generators which lie at the core of this provider!
