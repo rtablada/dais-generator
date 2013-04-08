@@ -43,6 +43,10 @@ class GenerateScaffoldViewCommand extends Generate
 				case 'show':
 					$this->buildShow();
 					break;
+
+				case '_form':
+					$this->buildForm();
+					break;
 				
 				default:
 					echo 'null';
@@ -97,15 +101,16 @@ class GenerateScaffoldViewCommand extends Generate
 	public function buildIndexTableBody()
 	{
 		$name = strtolower($this->argument('fileName'));
+		$singleName = Pluralizer::singular($name);
 		$fields = $this->getFields();
 		$tbody = '';
 
 		foreach ($fields as $key => $field) {
 			$td = 
-				'<td>{{ substr(0, 100, ' .
-				$name . '->' .
+				'<td>{{ substr($' .
+				$singleName . '->' .
 				$field->name .
-				') }}</td>';
+				', 0, 100) }}</td>';
 
 			if ($key == 0) {
 				$tbody .= $td;
@@ -118,7 +123,7 @@ class GenerateScaffoldViewCommand extends Generate
 
 	public function buildShow()
 	{
-		$properties = $this->getProperties();
+		$properties = $this->getShowProperties();
 		$stub = $this->getStub('views/show');
 		$stub = str_replace('{{properties}}', $properties, $stub);
 		$this->replaceNames($stub);
@@ -129,19 +134,150 @@ class GenerateScaffoldViewCommand extends Generate
 
 	public function getShowProperties()
 	{
-		
+		$name = strtolower($this->argument('fileName'));
+		$singleName = Pluralizer::singular($name);
+		$fields = $this->getFields();
+		$properties = '';
+
+		foreach ($fields as $key => $field) {
+			$property = 
+				'<p>' .
+				ucwords($field->name) .
+				': {{ $' .
+				$singleName .
+				'->' .
+				$field->name .
+				' }}</p>';
+			if ($key == 0) {
+				$properties .= $property;
+			} else {
+				$properties .= "\n\t\t" . $property;
+			}
+		}
+		return $properties;
+	}
+
+	public function buildForm()
+	{
+		$fields = $this->getFormFields();
+		$stub = $this->getStub('views/_form');
+		$stub = str_replace('{{fields}}', $fields, $stub);
+		$this->replaceNames($stub);
+
+		\File::put($this->getNewFilePath(), $stub);
+		$this->info('File created at: ' . $this->getNewFilePath());		
+
+	}
+
+	public function getFormFields()
+	{
+		$name = strtolower($this->argument('fileName'));
+		$singleName = Pluralizer::singular($name);
+		$fields = $this->getFields();
+		$formFields = '';
+
+		foreach ($fields as $key => $field) {
+			switch ($field->type) {
+				case 'string':
+					$formField =
+						"{{ Form::label('$field->name', '" .
+						ucwords($field->name) .
+						"') }}" .
+						"\n\t\t{{ Form::text('" .
+						$field->name .
+						"', $" .
+						$singleName .
+						"->" .
+						$field->name .
+						") }}";
+					break;
+				case 'text':
+					$formField =
+						"{{ Form::label('$field->name', '" .
+						ucwords($field->name) .
+						"') }}" .
+						"\n\t\t{{ Form::textarea('" .
+						$field->name .
+						"', $" .
+						$singleName .
+						"->" .
+						$field->name .
+						") }}";
+					break;
+				case 'integer':
+				case 'tinyInteger':
+				case 'unsignedInteger':
+					$formField =
+						"{{ Form::label('$field->name', '" .
+						ucwords($field->name) .
+						"') }}" .
+						"\n\t\t{{ Form::input('number', '" .
+						$field->name .
+						"', $" .
+						$singleName .
+						"->" .
+						$field->name .
+						", array('step'=>'1')) }}";
+					break;
+				case 'float':
+				case 'decimal':
+					$formField =
+						"{{ Form::label('$field->name', '" .
+						ucwords($field->name) .
+						"') }}" .
+						"\n\t\t{{ Form::input('number', '" .
+						$field->name .
+						"', $" .
+						$singleName .
+						"->" .
+						$field->name .
+						", array('step'=>'any')) }}";
+					break;
+				case 'boolean':
+					$formField =
+						"{{ Form::label('$field->name', '" .
+						ucwords($field->name) .
+						"') }}" .
+						"\n\t\t{{ Form::checkbox('" .
+						$field->name .
+						"') }}";
+						break;
+				
+				default:
+					$formField =
+						"{{ Form::label('$field->name', '" .
+						ucwords($field->name) .
+						"') }}" .
+						"\n\t\t{{ Form::text('" .
+						$field->name .
+						"', $" .
+						$singleName .
+						"->" .
+						$field->name .
+						") }}";
+					break;
+			}
+
+			if ($key == 0) {
+				$formFields .= $formField;
+			} else {
+				$formFields .= "\n\t\t" .$formField;
+			}
+		}
+		return $formFields;
 	}
 
 	public function replaceNames(&$stub)
 	{
 		$name = strtolower($this->argument('fileName'));
-		$pluralName = Pluralizer::plural($name);
-		$controllerName = ucwords($pluralName) . 'Controller';
+
+		$singleName = Pluralizer::singular($name);
+		$controllerName = ucwords($name) . 'Controller';
 
 		$stub = str_replace('{{ControllerName}}', $controllerName, $stub);
-		$stub = str_replace('{{pluralName}}', $pluralName, $stub);
-		$stub = str_replace('{{PluralName}}', ucwords($pluralName), $stub);
-		$stub = str_replace('{{singleName}}', $name, $stub);
+		$stub = str_replace('{{pluralName}}', $name, $stub);
+		$stub = str_replace('{{PluralName}}', ucwords($name), $stub);
+		$stub = str_replace('{{singleName}}', $singleName, $stub);
 		$stub = str_replace('{{SingleName}}', ucwords($name), $stub);
 	}
 
@@ -152,7 +288,7 @@ class GenerateScaffoldViewCommand extends Generate
 	 */
 	protected function getNewFilePath()
 	{
-		return app_path() . '/' . $this->option('path') . '/' . strtolower($this->option('method')) . '.php';
+		return app_path() . '/' . $this->option('path') . '/' . strtolower($this->option('method')) . '.blade.php';
 	}
 
 	public function applyDataToStub()

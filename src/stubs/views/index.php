@@ -9,12 +9,12 @@
 	<hr>
 	
 	<div class="row">
-		<button class="btn btn-primary pull-right">Add new {{SingleName}}</button>
+		<a href="{{URL::route('{{pluralName}}.create')}}" class="btn btn-primary pull-right">Add new {{SingleName}}</a>
 	</div>
 	
 	<div class="row">
 	@if (count(${{pluralName}}))
-		<table class="table table-striped">
+		<table class="table table-striped span12">
 			<thead>
 				<tr>
 					{{thead}}
@@ -32,8 +32,11 @@
 		<p>No {{pluralName}} exisit at this time</p>
 	@endif
 	</div>
+
 	<div class="row">
+		<div class="span12">
 		{{ ${{pluralName}}->links() }}
+		</div>
 	</div>
 	<hr>
 @stop

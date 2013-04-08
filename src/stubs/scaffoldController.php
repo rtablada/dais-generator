@@ -34,10 +34,10 @@ class {{ControllerName}} extends BaseController {
 		$input = Input::all();
 		if (${{singleName}} = {{SingleName}}::create($input)) {
 			Session::flash('success', '{{SingleName}} created successfully!');
-			return Redirect::route('{{ControllerName}}.index');
+			return Redirect::route('{{pluralName}}.index');
 		} else {
 			Session::flash('error', 'Something went wrong...');
-			return Redirect::route('{{ControllerName}}.create')->withInput();
+			return Redirect::route('{{pluralName}}.create')->withInput();
 		}
 	}
 
@@ -49,8 +49,16 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function show($id)
 	{
-		${{singleName}} = {{SingleName}}::find($id);
-		return View::make('{{ControllerName}}.show', compact('{{singleName}}'));
+		if (${{singleName}} = {{SingleName}}::find($id)) {
+			// Good to continue
+			return;
+		} else {
+			echo 'bad';
+			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
+			return Redirect::route('{{pluralName}}.index');
+		}
+
+		return View::make('{{pluralName}}.show', compact('{{singleName}}'));
 	}
 
 	/**
@@ -61,8 +69,16 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function edit($id)
 	{
-		${{singleName}} = {{SingleName}}::find($id);
-		return View::make('{{ControllerName}}.edit', compact('{{singleName}}'));
+		if (${{singleName}} = {{SingleName}}::find($id)) {
+			// Good to continue
+			return;
+		} else {
+			echo 'bad';
+			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
+			return Redirect::route('{{pluralName}}.index');
+		}
+
+		return View::make('{{pluralName}}.edit', compact('{{singleName}}'));
 	}
 
 	/**
@@ -73,14 +89,22 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function update($id)
 	{
-		${{singleName}} = {{SingleName}}::find($id);
+		if (${{singleName}} = {{SingleName}}::find($id)) {
+			// Good to continue
+			return;
+		} else {
+			echo 'bad';
+			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
+			return Redirect::route('{{pluralName}}.index');
+		}
+
 		$input = Input::all();
 		if (${{singleName}}->fill($input)) {
 			Session::flash('success', '{{SingleName}} updated successfully!');
-			return Redirect::to('{{ControllerName}}.index');
+			return Redirect::to('{{pluralName}}.index');
 		} else {
 			Session::flash('error', 'Something went wrong...');
-			return Redirect::route('{{ControllerName}}.edit', $id)->withInput();
+			return Redirect::route('{{pluralName}}.edit', $id)->withInput();
 		}
 	}
 
@@ -92,11 +116,20 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function destroy($id)
 	{
+		if (${{singleName}} = {{SingleName}}::find($id)) {
+			// Good to continue
+			return;
+		} else {
+			echo 'bad';
+			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
+			return Redirect::route('{{pluralName}}.index');
+		}
+
 		if ({{SingleName}}::destroy($id)) {
 			Session::flash('success', '{{SingleName}} deleted!');
 		} else {
 			Session::flash('error', 'Could not delete {{singleName}}...');
 		}
-		return Redirect::route('{{ControllerName}}.index');
+		return Redirect::route('{{pluralName}}.index');
 	}
 }

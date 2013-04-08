@@ -85,12 +85,6 @@ class GenerateScaffoldCommand extends Generate
 			)
 		);
 
-		// Update the routes.php file
-		\File::append(
-			app_path() . '/routes.php',
-			"\n\nRoute::resource('" . strtolower($pluralName) . "', '" . $pluralName . "Controller');"
-		);
-
 
 		// Create the views
 		if ( ! \File::exists(app_path() . '/views/' . strtolower($pluralName)) )
@@ -113,6 +107,12 @@ class GenerateScaffoldCommand extends Generate
 			array(
 				'tableName' => $pluralName
 			)
+		);
+
+		// Update the routes.php file
+		\File::append(
+			app_path() . '/routes.php',
+			"\n\nRoute::resource('" . strtolower($pluralName) . "', '" . $pluralName . "Controller');"
 		);
 	}
 

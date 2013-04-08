@@ -29,6 +29,16 @@
 	<![endif]-->
 
 	<div class="container">
+		<div class="row flash">
+			@foreach (array('error', 'alert', 'success', 'info') as $type)
+				@if ( Session::get($type) )
+					<div class="alert alert-{{$type}}">
+						<a class="close" data-dismiss="alert">&times;</a>
+						<p>{{ Session::get($type) }}</p>
+					</div>
+				@endif
+			@endforeach
+		</div>
 		@yield('content')
 	</div> <!-- /container -->
 

@@ -60,7 +60,7 @@ class GenerateScaffoldViewsCommand extends Generate
 
 		$name = ucwords(strtolower($this->argument('fileName')));
 
-		$methods = array('index', 'show', 'create', 'edit');
+		$methods = array('index', 'show', '_form', 'create', 'edit');
 		foreach($methods as $method)
 		{
 			$this->call(
