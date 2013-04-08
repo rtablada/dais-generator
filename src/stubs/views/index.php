@@ -29,7 +29,9 @@
 			</tbody>
 		</table>
 	@else
-		<p>No {{pluralName}} exisit at this time</p>
+		<div class="span12">
+			<h3>No {{pluralName}} exisit at this time</h3>
+		</div>
 	@endif
 	</div>
 
