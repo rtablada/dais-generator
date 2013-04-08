@@ -7,6 +7,12 @@
             "email": "ryan.tablada@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/rtablada/Laravel-4-Generators"
+        }
+    ],
     "require": {
         "php": ">=5.3.0",
         "way/generators": "dev-master"
