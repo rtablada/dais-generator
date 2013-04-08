@@ -50,7 +50,7 @@ class GenerateScaffoldCommand extends Generate
 
 		// Create the model
 		$this->call(
-			'generate:sAllModel',
+			'generate:sModel',
 			array(
 				'fileName' => $name,
 				'--fields' => $this->option('fields')
@@ -60,7 +60,7 @@ class GenerateScaffoldCommand extends Generate
 
 		// Create the controller
 		$this->call(
-			'generate:sAllController',
+			'generate:sController',
 			array('fileName' => $name)
 		);
 
