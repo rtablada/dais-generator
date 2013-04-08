@@ -57,7 +57,7 @@ class DaisGeneratorServiceProvider extends ServiceProvider {
 			'generate.sController',
 			'generate.sModel',
 			'generate.sView',
-			'generate.sViews',
+			'generate.sAllViews',
 			'generate.scaffold'
 		);
 	}
