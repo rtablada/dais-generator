@@ -43,9 +43,11 @@ class GenerateScaffoldViewCommand extends Generate
 				case 'show':
 					$this->buildShow();
 					break;
-
 				case '_form':
 					$this->buildForm();
+					break;
+				case 'create':
+					$this->buildCreate();
 					break;
 				
 				default:
@@ -267,6 +269,15 @@ class GenerateScaffoldViewCommand extends Generate
 		return $formFields;
 	}
 
+	public function buildCreate()
+	{
+		$stub = $this->getStub('views/create');
+		$this->replaceNames($stub);
+
+		\File::put($this->getNewFilePath(), $stub);
+		$this->info('File created at: ' . $this->getNewFilePath());
+	}
+
 	public function replaceNames(&$stub)
 	{
 		$name = strtolower($this->argument('fileName'));
@@ -278,7 +289,7 @@ class GenerateScaffoldViewCommand extends Generate
 		$stub = str_replace('{{pluralName}}', $name, $stub);
 		$stub = str_replace('{{PluralName}}', ucwords($name), $stub);
 		$stub = str_replace('{{singleName}}', $singleName, $stub);
-		$stub = str_replace('{{SingleName}}', ucwords($name), $stub);
+		$stub = str_replace('{{SingleName}}', ucwords($singleName), $stub);
 	}
 
 	/**

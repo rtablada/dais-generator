@@ -3,21 +3,22 @@
 @section('content')
 	<div class="row">
 		<div class="span12">
-			<h1>New {{SingleName}}</h1>
+			<h1>New {{SingleName}}:</h1>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
-		{{ Form::model(${{singleName}}, array('url'=>URL::route('{{controllerName}}.store'))) }}
-		<fieldset>
+		<div class="span12">
+		{{ Form::model(${{singleName}}, array('url'=>URL::route('{{pluralName}}.store'))) }}
 		@include('{{pluralName}}._form')
-		</fieldset>
+		</div>
 	</div>
 	<div class="row">
 		<div class="form-actions">
 			{{ Form::submit('Save', array('class' => 'btn btn-primary')) }}
-			{{ HTML::link( URL::edit_user($user->id), 'Cancel', array('class' => 'btn')) }}
+			<a href="{{ URL::route('{{pluralName}}.index') }}" class="btn">Cancel</a>
 		</p>
+		{{ Form::close() }}
 	</div>
 	<hr>
 @stop
