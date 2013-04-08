@@ -49,6 +49,9 @@ class GenerateScaffoldViewCommand extends Generate
 				case 'create':
 					$this->buildCreate();
 					break;
+				case 'edit':
+					$this->buildEdit();
+					break;
 				
 				default:
 					echo 'null';
@@ -277,6 +280,16 @@ class GenerateScaffoldViewCommand extends Generate
 		\File::put($this->getNewFilePath(), $stub);
 		$this->info('File created at: ' . $this->getNewFilePath());
 	}
+
+	public function buildEdit()
+	{
+		$stub = $this->getStub('views/edit');
+		$this->replaceNames($stub);
+
+		\File::put($this->getNewFilePath(), $stub);
+		$this->info('File created at: ' . $this->getNewFilePath());
+	}
+
 
 	public function replaceNames(&$stub)
 	{
