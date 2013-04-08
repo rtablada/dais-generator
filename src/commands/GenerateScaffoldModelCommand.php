@@ -17,7 +17,7 @@ class GenerateScaffoldModelCommand extends Generate
 	 * 
 	 * @var string
 	 */
-	protected $name = 'generate:scaffoldModel';
+	protected $name = 'generate:sModel';
 	
 	/**
 	 * The console command description.

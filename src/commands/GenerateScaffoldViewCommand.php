@@ -17,7 +17,7 @@ class GenerateScaffoldViewCommand extends Generate
 	 * 
 	 * @var string
 	 */
-	protected $name = 'generate:scaffoldView';
+	protected $name = 'generate:sView';
 	
 	/**
 	 * The console command description.

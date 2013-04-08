@@ -17,7 +17,7 @@ class GenerateScaffoldViewsCommand extends Generate
 	 * 
 	 * @var string
 	 */
-	protected $name = 'generate:scaffoldViews';
+	protected $name = 'generate:sViews';
 	
 	/**
 	 * The console command description.
@@ -31,7 +31,7 @@ class GenerateScaffoldViewsCommand extends Generate
 	 * 
 	 * @var string
 	 */
-	protected $type = 'scaffoldViews';
+	protected $type = 'sViews';
 	
 	/**
 	 * Create a new command instance.
@@ -64,7 +64,7 @@ class GenerateScaffoldViewsCommand extends Generate
 		foreach($methods as $method)
 		{
 			$this->call(
-				'generate:scaffoldView',
+				'generate:sView',
 				array(
 					'fileName'  => $name,
 					'--method'  => $method,

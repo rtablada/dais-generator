@@ -17,7 +17,7 @@ class GenerateScaffoldControllerCommand extends Generate
 	 * 
 	 * @var string
 	 */
-	protected $name = 'generate:scaffoldController';
+	protected $name = 'generate:sController';
 	
 	/**
 	 * The console command description.
