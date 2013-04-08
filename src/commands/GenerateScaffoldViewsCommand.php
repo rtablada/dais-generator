@@ -17,7 +17,7 @@ class GenerateScaffoldViewsCommand extends Generate
 	 * 
 	 * @var string
 	 */
-	protected $name = 'generate:sViews';
+	protected $name = 'generate:sAllViews';
 	
 	/**
 	 * The console command description.
@@ -31,7 +31,7 @@ class GenerateScaffoldViewsCommand extends Generate
 	 * 
 	 * @var string
 	 */
-	protected $type = 'sViews';
+	protected $type = 'sAllViews';
 	
 	/**
 	 * Create a new command instance.

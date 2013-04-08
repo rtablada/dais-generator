@@ -43,7 +43,7 @@ class DaisGeneratorServiceProvider extends ServiceProvider {
 			return new Commands\GenerateScaffoldViewCommand($app);
 		});
 
-		$this->app['generate.sViews'] = $this->app->share(function($app)
+		$this->app['generate.sAllViews'] = $this->app->share(function($app)
 		{
 			return new Commands\GenerateScaffoldViewsCommand($app);
 		});
