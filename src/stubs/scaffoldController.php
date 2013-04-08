@@ -49,11 +49,7 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function show($id)
 	{
-		if (${{singleName}} = {{SingleName}}::find($id)) {
-			// Good to continue
-			return;
-		} else {
-			echo 'bad';
+		if (!${{singleName}} = {{SingleName}}::find($id)) {
 			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
 			return Redirect::route('{{pluralName}}.index');
 		}
@@ -69,11 +65,7 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function edit($id)
 	{
-		if (${{singleName}} = {{SingleName}}::find($id)) {
-			// Good to continue
-			return;
-		} else {
-			echo 'bad';
+		if (!${{singleName}} = {{SingleName}}::find($id)) {
 			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
 			return Redirect::route('{{pluralName}}.index');
 		}
@@ -89,19 +81,17 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function update($id)
 	{
-		if (${{singleName}} = {{SingleName}}::find($id)) {
-			// Good to continue
-			return;
-		} else {
-			echo 'bad';
+		if (!${{singleName}} = {{SingleName}}::find($id)) {
 			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
 			return Redirect::route('{{pluralName}}.index');
 		}
 
 		$input = Input::all();
-		if (${{singleName}}->fill($input)) {
+		${{singleName}}->fill($input);
+
+		if (${{singleName}}->save()) {
 			Session::flash('success', '{{SingleName}} updated successfully!');
-			return Redirect::to('{{pluralName}}.index');
+			return Redirect::route('{{pluralName}}.index');
 		} else {
 			Session::flash('error', 'Something went wrong...');
 			return Redirect::route('{{pluralName}}.edit', $id)->withInput();
@@ -116,11 +106,7 @@ class {{ControllerName}} extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		if (${{singleName}} = {{SingleName}}::find($id)) {
-			// Good to continue
-			return;
-		} else {
-			echo 'bad';
+		if (!${{singleName}} = {{SingleName}}::find($id)) {
 			Session::flash('error', 'Could not find {{singleName}} - ' . $id);
 			return Redirect::route('{{pluralName}}.index');
 		}

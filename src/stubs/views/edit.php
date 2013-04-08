@@ -9,7 +9,7 @@
 	<hr>
 	<div class="row">
 		<div class="span12">
-		{{ Form::model(${{singleName}}, array('url'=>URL::route('{{pluralName}}.update', ${{singleName}}->id))) }}
+		{{ Form::model(${{singleName}}, array('method'=>'put', 'url'=>URL::route('{{pluralName}}.update', ${{singleName}}->id))) }}
 		@include('{{pluralName}}._form')
 		</div>
 	</div>
