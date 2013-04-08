@@ -111,11 +111,8 @@ class {{ControllerName}} extends BaseController {
 			return Redirect::route('{{pluralName}}.index');
 		}
 
-		if ({{SingleName}}::destroy($id)) {
-			Session::flash('success', '{{SingleName}} deleted!');
-		} else {
-			Session::flash('error', 'Could not delete {{singleName}}...');
-		}
+		{{SingleName}}::destroy($id);
+		Session::flash('success', '{{SingleName}} deleted!');
 		return Redirect::route('{{pluralName}}.index');
 	}
 }

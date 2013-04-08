@@ -100,6 +100,7 @@ class GenerateScaffoldViewCommand extends Generate
 				$thead .= "\n\t\t\t\t\t" . $th;
 			}
 		}
+		$thead .= "\n\t\t\t\t\t<th></th>";
 		return $thead;
 	}
 
@@ -123,6 +124,14 @@ class GenerateScaffoldViewCommand extends Generate
 				$tbody .= "\n\t\t\t\t\t" . $td;
 			}
 		}
+		$tbody .=
+			"\n\t\t\t\t\t<td>\n\t\t\t\t\t\t" .
+			'<a href="{{ URL::route(\'{{pluralName}}.edit\', ${{singleName}}->id) }}"><i class="icon-edit"></i></a>' .
+			"\n\t\t\t\t\t\t" .
+			'<a href="{{ URL::route(\'{{pluralName}}.destroy\', ${{singleName}}->id) }}" data-method="DELETE">' .
+			"\n\t\t\t\t\t\t\t<i class=\"icon-trash\"></i>" .
+			"\n\t\t\t\t\t\t</a>" .
+			"\n\t\t\t\t\t\t</td>";
 		return $tbody;
 	}
 
